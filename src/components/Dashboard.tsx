@@ -1,5 +1,6 @@
 import React from 'react';
-import { Users, Car, MapPin, Clock } from 'lucide-react';
+import { Users, Car, Clock } from 'lucide-react';
+import LiveTracking from './LiveTracking';
 
 const Dashboard: React.FC = () => {
   const stats = [
@@ -71,23 +72,8 @@ const Dashboard: React.FC = () => {
         })}
       </div>
 
-      {/* Live Tracking Map */}
-      <div className="bg-[#8B8E8F] rounded-xl p-6">
-        <div className="flex items-center space-x-3 mb-6">
-          <MapPin className="text-[#FFD43B]" size={24} />
-          <h2 className="text-xl font-semibold text-white">Live Tracking</h2>
-        </div>
-        
-        <div className="bg-[#434546] rounded-lg p-8 flex items-center justify-center min-h-[300px] border-2 border-dashed border-gray-600">
-          <div className="text-center">
-            <MapPin className="text-gray-500 mx-auto mb-4" size={48} />
-            <p className="text-gray-400 text-lg">Interactive Map Component</p>
-            <p className="text-gray-500 text-sm mt-2">
-              Live vehicle tracking will be displayed here
-            </p>
-          </div>
-        </div>
-      </div>
+      {/* Live Tracking Component */}
+      <LiveTracking />
 
       {/* Recent Activity */}
       <div className="bg-[#8B8E8F] rounded-xl p-6">

@@ -13,6 +13,12 @@ interface CarData {
   lastMaintenance: string;
 }
 
+interface SummaryStat {
+  value: string | number;
+  label: string;
+  color: string;
+}
+
 const CarsManagement: React.FC = () => {
   const [cars, setCars] = useState<CarData[]>([
     {
@@ -82,158 +88,161 @@ const CarsManagement: React.FC = () => {
     setShowAddForm(true);
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'available':
-        return 'bg-green-600 text-white';
-      case 'in-use':
-        return 'bg-blue-600 text-white';
-      case 'maintenance':
-        return 'bg-red-600 text-white';
-      default:
-        return 'bg-gray-600 text-white';
-    }
+  const getStatusColor = (status: string): string => {
+    const statusColors = {
+      available: 'bg-green-600 text-white',
+      'in-use': 'bg-blue-600 text-white',
+      maintenance: 'bg-red-600 text-white',
+    };
+    return statusColors[status as keyof typeof statusColors] || 'bg-gray-600 text-white';
   };
 
-  const formatKilometers = (km: number) => {
+  const formatKilometers = (km: number): string => {
     return km.toLocaleString() + ' km';
   };
 
+  const calculateSummaryStats = (): SummaryStat[] => [
+    {
+      value: cars.length,
+      label: 'Total Cars',
+      color: 'text-[#FFD43B]'
+    },
+    {
+      value: cars.filter(car => car.status === 'available').length,
+      label: 'Available',
+      color: 'icon-success'
+    },
+    {
+      value: cars.filter(car => car.status === 'in-use').length,
+      label: 'In Use',
+      color: 'icon-info'
+    },
+    {
+      value: cars.filter(car => car.status === 'maintenance').length,
+      label: 'Maintenance',
+      color: 'icon-error'
+    }
+  ];
+
+  const renderSummaryStat = (stat: SummaryStat, index: number) => (
+    <div key={index} className="card text-center">
+      <p className={`text-3xl font-bold ${stat.color}`}>{stat.value}</p>
+      <p className="text-body">{stat.label}</p>
+    </div>
+  );
+
+  const renderCarCard = (car: CarData) => (
+    <div key={car.id} className="card card-hover">
+      <div className="relative mb-4">
+        <img
+          src={car.photo}
+          alt={car.name}
+          className="w-full h-48 object-cover rounded-lg"
+        />
+        <div className="absolute top-3 right-3">
+          <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(car.status)}`}>
+            {car.status.charAt(0).toUpperCase() + car.status.slice(1).replace('-', ' ')}
+          </span>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <div>
+          <h3 className="text-xl font-semibold text-white">{car.name}</h3>
+          <p className="text-body">Year: {car.year}</p>
+        </div>
+
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Gauge className="icon-primary" size={16} />
+              <span className="text-body">Total Distance</span>
+            </div>
+            <span className="text-white font-bold">{formatKilometers(car.totalKilometers)}</span>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Fuel className="icon-info" size={16} />
+              <span className="text-body">Fuel Type</span>
+            </div>
+            <span className="text-white font-bold">{car.fuelType}</span>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <span className="text-body">Transmission</span>
+            <span className="text-white font-bold">{car.transmission}</span>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Calendar className="icon-success" size={16} />
+              <span className="text-body">Last Service</span>
+            </div>
+            <span className="text-white font-bold">
+              {new Date(car.lastMaintenance).toLocaleDateString()}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <button
+        onClick={() => deleteCar(car.id)}
+        className="btn btn-danger w-full mt-6 flex items-center justify-center space-x-2"
+      >
+        <Trash2 size={16} />
+        <span>Remove Car</span>
+      </button>
+    </div>
+  );
+
+  const renderAddCarCard = () => (
+    <div className="card border-2 border-dashed border-gray-600 hover:border-[#FFD43B] transition-colors">
+      <div className="text-center h-full flex flex-col justify-center">
+        <Plus className="icon-secondary mx-auto mb-4" size={48} />
+        <p className="text-body text-lg font-medium">Add New Car</p>
+        <p className="text-muted text-sm mt-2 mb-4">Expand your fleet with a new vehicle</p>
+        <button
+          onClick={addNewCar}
+          className="btn btn-primary"
+        >
+          Add Car
+        </button>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+    <div className="section-spacing">
+      {/* Header Section */}
+      <header className="flex-responsive">
         <div className="flex items-center space-x-3">
-          <Car className="text-[#FFD43B]" size={32} />
-          <h1 className="text-3xl font-bold text-[#FFD43B]">Cars Management</h1>
+          <Car className="icon-primary" size={32} />
+          <h1 className="text-heading">Cars Management</h1>
         </div>
         <button
           onClick={addNewCar}
-          className="mt-4 sm:mt-0 flex items-center space-x-2 px-6 py-3 bg-[#FFD43B] text-black font-medium rounded-lg hover:bg-yellow-400 transition-colors"
+          className="btn btn-primary mt-4 sm:mt-0 flex items-center space-x-2"
         >
           <Plus size={20} />
           <span>Add New Car</span>
         </button>
-      </div>
+      </header>
 
       {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-[#8B8E8F] rounded-xl p-6">
-          <div className="text-center">
-            <p className="text-3xl font-bold text-[#FFD43B]">{cars.length}</p>
-            <p className="text-gray-300">Total Cars</p>
-          </div>
+      <section>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          {calculateSummaryStats().map(renderSummaryStat)}
         </div>
-        <div className="bg-[#8B8E8F] rounded-xl p-6">
-          <div className="text-center">
-            <p className="text-3xl font-bold text-green-400">
-              {cars.filter(car => car.status === 'available').length}
-            </p>
-            <p className="text-gray-300">Available</p>
-          </div>
-        </div>
-        <div className="bg-[#8B8E8F] rounded-xl p-6">
-          <div className="text-center">
-            <p className="text-3xl font-bold text-blue-400">
-              {cars.filter(car => car.status === 'in-use').length}
-            </p>
-            <p className="text-gray-300">In Use</p>
-          </div>
-        </div>
-        <div className="bg-[#8B8E8F] rounded-xl p-6">
-          <div className="text-center">
-            <p className="text-3xl font-bold text-red-400">
-              {cars.filter(car => car.status === 'maintenance').length}
-            </p>
-            <p className="text-gray-300">Maintenance</p>
-          </div>
-        </div>
-      </div>
+      </section>
 
       {/* Cars Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {cars.map((car) => (
-          <div
-            key={car.id}
-            className="bg-[#8B8E8F] rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:scale-105"
-          >
-            <div className="relative mb-4">
-              <img
-                src={car.photo}
-                alt={car.name}
-                className="w-full h-48 object-cover rounded-lg"
-              />
-              <div className="absolute top-3 right-3">
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(car.status)}`}>
-                  {car.status.charAt(0).toUpperCase() + car.status.slice(1).replace('-', ' ')}
-                </span>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <h3 className="text-xl font-semibold text-white">{car.name}</h3>
-                <p className="text-gray-300">Year: {car.year}</p>
-              </div>
-
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Gauge className="text-[#FFD43B]" size={16} />
-                    <span className="text-gray-300">Total Distance</span>
-                  </div>
-                  <span className="text-white font-bold">{formatKilometers(car.totalKilometers)}</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Fuel className="text-blue-400" size={16} />
-                    <span className="text-gray-300">Fuel Type</span>
-                  </div>
-                  <span className="text-white font-bold">{car.fuelType}</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-300">Transmission</span>
-                  <span className="text-white font-bold">{car.transmission}</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Calendar className="text-green-400" size={16} />
-                    <span className="text-gray-300">Last Service</span>
-                  </div>
-                  <span className="text-white font-bold">
-                    {new Date(car.lastMaintenance).toLocaleDateString()}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <button
-              onClick={() => deleteCar(car.id)}
-              className="w-full mt-6 flex items-center justify-center space-x-2 px-4 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors"
-            >
-              <Trash2 size={16} />
-              <span>Remove Car</span>
-            </button>
-          </div>
-        ))}
-
-        {/* Add New Car Card */}
-        <div className="bg-[#8B8E8F] rounded-xl p-6 border-2 border-dashed border-gray-600 hover:border-[#FFD43B] transition-colors">
-          <div className="text-center h-full flex flex-col justify-center">
-            <Plus className="text-gray-400 mx-auto mb-4" size={48} />
-            <p className="text-gray-300 text-lg font-medium">Add New Car</p>
-            <p className="text-gray-400 text-sm mt-2 mb-4">Expand your fleet with a new vehicle</p>
-            <button
-              onClick={addNewCar}
-              className="px-6 py-2 bg-[#FFD43B] text-black font-medium rounded-lg hover:bg-yellow-400 transition-colors"
-            >
-              Add Car
-            </button>
-          </div>
+      <section>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {cars.map(renderCarCard)}
+          {renderAddCarCard()}
         </div>
-      </div>
+      </section>
     </div>
   );
 };

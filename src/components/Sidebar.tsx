@@ -17,7 +17,13 @@ interface SidebarProps {
   setSidebarOpen: (open: boolean) => void;
 }
 
-const menuItems = [
+interface MenuItem {
+  id: string;
+  label: string;
+  icon: React.ComponentType<{ size?: number | string; className?: string }>;
+}
+
+const menuItems: MenuItem[] = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { id: 'bookings', label: 'Future Bookings', icon: Calendar },
   { id: 'drivers', label: 'Add/Delete Drivers', icon: Users },
@@ -32,6 +38,31 @@ const Sidebar: React.FC<SidebarProps> = ({
   sidebarOpen,
   setSidebarOpen,
 }) => {
+  const handleMenuClick = (sectionId: string) => {
+    setActiveSection(sectionId);
+    setSidebarOpen(false);
+  };
+
+  const renderMenuItem = (item: MenuItem) => {
+    const IconComponent = item.icon;
+    const isActive = activeSection === item.id;
+    
+    return (
+      <button
+        key={item.id}
+        onClick={() => handleMenuClick(item.id)}
+        className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+          isActive
+            ? 'bg-[#FFD43B] text-black font-medium'
+            : 'text-white hover:bg-[#434546] hover:text-[#FFD43B]'
+        }`}
+      >
+        <IconComponent size={20} />
+        <span>{item.label}</span>
+      </button>
+    );
+  };
+
   return (
     <>
       {/* Mobile menu button */}
@@ -62,28 +93,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           </h1>
           
           <nav className="space-y-2">
-            {menuItems.map((item) => {
-              const IconComponent = item.icon;
-              const isActive = activeSection === item.id;
-              
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => {
-                    setActiveSection(item.id);
-                    setSidebarOpen(false);
-                  }}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
-                    isActive
-                      ? 'bg-[#FFD43B] text-black font-medium'
-                      : 'text-white hover:bg-[#434546] hover:text-[#FFD43B]'
-                  }`}
-                >
-                  <IconComponent size={20} />
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
+            {menuItems.map(renderMenuItem)}
           </nav>
         </div>
       </aside>

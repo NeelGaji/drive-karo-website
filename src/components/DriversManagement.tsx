@@ -12,6 +12,12 @@ interface Driver {
   specialties: string[];
 }
 
+interface SummaryStat {
+  value: string | number;
+  label: string;
+  color: string;
+}
+
 const DriversManagement: React.FC = () => {
   const [drivers, setDrivers] = useState<Driver[]>([
     {
@@ -66,127 +72,137 @@ const DriversManagement: React.FC = () => {
     setShowAddForm(true);
   };
 
+  const calculateSummaryStats = (): SummaryStat[] => [
+    {
+      value: drivers.length,
+      label: 'Total Drivers',
+      color: 'text-[#FFD43B]'
+    },
+    {
+      value: drivers.reduce((sum, driver) => sum + driver.customersServed, 0),
+      label: 'Total Customers Served',
+      color: 'icon-success'
+    },
+    {
+      value: (drivers.reduce((sum, driver) => sum + driver.rating, 0) / drivers.length).toFixed(1),
+      label: 'Average Rating',
+      color: 'icon-info'
+    }
+  ];
+
+  const renderSummaryStat = (stat: SummaryStat, index: number) => (
+    <div key={index} className="card text-center">
+      <p className={`text-3xl font-bold ${stat.color}`}>{stat.value}</p>
+      <p className="text-body">{stat.label}</p>
+    </div>
+  );
+
+  const renderDriverCard = (driver: Driver) => (
+    <div key={driver.id} className="card card-hover">
+      <div className="text-center mb-4">
+        <img
+          src={driver.photo}
+          alt={driver.name}
+          className="w-20 h-20 rounded-full mx-auto mb-3 object-cover border-4 border-[#FFD43B]"
+        />
+        <h3 className="text-xl font-semibold text-white">{driver.name}</h3>
+        <p className="text-body">Age: {driver.age}</p>
+      </div>
+
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <span className="text-body">Customers Served</span>
+          <span className="text-[#FFD43B] font-bold">{driver.customersServed}</span>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <span className="text-body">Rating</span>
+          <div className="flex items-center space-x-1">
+            <Star className="icon-warning fill-current" size={16} />
+            <span className="text-white font-bold">{driver.rating}</span>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <span className="text-body">Experience</span>
+          <div className="flex items-center space-x-1">
+            <Award className="icon-info" size={16} />
+            <span className="text-white font-bold">{driver.yearsExperience}y</span>
+          </div>
+        </div>
+
+        <div className="pt-3 border-t border-gray-600">
+          <p className="text-body text-sm mb-2">Specialties:</p>
+          <div className="flex flex-wrap gap-1">
+            {driver.specialties.map((specialty, index) => (
+              <span
+                key={index}
+                className="px-2 py-1 bg-[#434546] text-xs text-[#FFD43B] rounded-full"
+              >
+                {specialty}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <button
+        onClick={() => deleteDriver(driver.id)}
+        className="btn btn-danger w-full mt-6 flex items-center justify-center space-x-2"
+      >
+        <Trash2 size={16} />
+        <span>Remove Driver</span>
+      </button>
+    </div>
+  );
+
+  const renderAddDriverCard = () => (
+    <div className="card border-2 border-dashed border-gray-600 hover:border-[#FFD43B] transition-colors">
+      <div className="text-center">
+        <Plus className="icon-secondary mx-auto mb-4" size={48} />
+        <p className="text-body text-lg font-medium">Add New Driver</p>
+        <p className="text-muted text-sm mt-2">Click to add a new driver to your team</p>
+        <button
+          onClick={addNewDriver}
+          className="btn btn-primary mt-4"
+        >
+          Add Driver
+        </button>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+    <div className="section-spacing">
+      {/* Header Section */}
+      <header className="flex-responsive">
         <div className="flex items-center space-x-3">
-          <Users className="text-[#FFD43B]" size={32} />
-          <h1 className="text-3xl font-bold text-[#FFD43B]">Drivers Management</h1>
+          <Users className="icon-primary" size={32} />
+          <h1 className="text-heading">Drivers Management</h1>
         </div>
         <button
           onClick={addNewDriver}
-          className="mt-4 sm:mt-0 flex items-center space-x-2 px-6 py-3 bg-[#FFD43B] text-black font-medium rounded-lg hover:bg-yellow-400 transition-colors"
+          className="btn btn-primary mt-4 sm:mt-0 flex items-center space-x-2"
         >
           <Plus size={20} />
           <span>Add New Driver</span>
         </button>
-      </div>
+      </header>
 
       {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-[#8B8E8F] rounded-xl p-6">
-          <div className="text-center">
-            <p className="text-3xl font-bold text-[#FFD43B]">{drivers.length}</p>
-            <p className="text-gray-300">Total Drivers</p>
-          </div>
+      <section>
+        <div className="grid-responsive">
+          {calculateSummaryStats().map(renderSummaryStat)}
         </div>
-        <div className="bg-[#8B8E8F] rounded-xl p-6">
-          <div className="text-center">
-            <p className="text-3xl font-bold text-green-400">
-              {drivers.reduce((sum, driver) => sum + driver.customersServed, 0)}
-            </p>
-            <p className="text-gray-300">Total Customers Served</p>
-          </div>
-        </div>
-        <div className="bg-[#8B8E8F] rounded-xl p-6">
-          <div className="text-center">
-            <p className="text-3xl font-bold text-blue-400">
-              {(drivers.reduce((sum, driver) => sum + driver.rating, 0) / drivers.length).toFixed(1)}
-            </p>
-            <p className="text-gray-300">Average Rating</p>
-          </div>
-        </div>
-      </div>
+      </section>
 
       {/* Drivers Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {drivers.map((driver) => (
-          <div
-            key={driver.id}
-            className="bg-[#8B8E8F] rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:scale-105"
-          >
-            <div className="text-center mb-4">
-              <img
-                src={driver.photo}
-                alt={driver.name}
-                className="w-20 h-20 rounded-full mx-auto mb-3 object-cover border-4 border-[#FFD43B]"
-              />
-              <h3 className="text-xl font-semibold text-white">{driver.name}</h3>
-              <p className="text-gray-300">Age: {driver.age}</p>
-            </div>
-
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-gray-300">Customers Served</span>
-                <span className="text-[#FFD43B] font-bold">{driver.customersServed}</span>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <span className="text-gray-300">Rating</span>
-                <div className="flex items-center space-x-1">
-                  <Star className="text-yellow-400 fill-current" size={16} />
-                  <span className="text-white font-bold">{driver.rating}</span>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <span className="text-gray-300">Experience</span>
-                <div className="flex items-center space-x-1">
-                  <Award className="text-blue-400" size={16} />
-                  <span className="text-white font-bold">{driver.yearsExperience}y</span>
-                </div>
-              </div>
-
-              <div className="pt-3 border-t border-gray-600">
-                <p className="text-gray-300 text-sm mb-2">Specialties:</p>
-                <div className="flex flex-wrap gap-1">
-                  {driver.specialties.map((specialty, index) => (
-                    <span
-                      key={index}
-                      className="px-2 py-1 bg-[#434546] text-xs text-[#FFD43B] rounded-full"
-                    >
-                      {specialty}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <button
-              onClick={() => deleteDriver(driver.id)}
-              className="w-full mt-6 flex items-center justify-center space-x-2 px-4 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors"
-            >
-              <Trash2 size={16} />
-              <span>Remove Driver</span>
-            </button>
-          </div>
-        ))}
-
-        {/* Add New Driver Card */}
-        <div className="bg-[#8B8E8F] rounded-xl p-6 border-2 border-dashed border-gray-600 hover:border-[#FFD43B] transition-colors">
-          <div className="text-center">
-            <Plus className="text-gray-400 mx-auto mb-4" size={48} />
-            <p className="text-gray-300 text-lg font-medium">Add New Driver</p>
-            <p className="text-gray-400 text-sm mt-2">Click to add a new driver to your team</p>
-            <button
-              onClick={addNewDriver}
-              className="mt-4 px-6 py-2 bg-[#FFD43B] text-black font-medium rounded-lg hover:bg-yellow-400 transition-colors"
-            >
-              Add Driver
-            </button>
-          </div>
+      <section>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {drivers.map(renderDriverCard)}
+          {renderAddDriverCard()}
         </div>
-      </div>
+      </section>
     </div>
   );
 };

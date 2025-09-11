@@ -7,27 +7,23 @@ import CarsManagement from './components/CarsManagement';
 import Courses from './components/Courses';
 import Profile from './components/Profile';
 
+type SectionType = 'dashboard' | 'bookings' | 'drivers' | 'cars' | 'courses' | 'profile';
+
 function App() {
-  const [activeSection, setActiveSection] = useState('dashboard');
+  const [activeSection, setActiveSection] = useState<SectionType>('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const renderContent = () => {
-    switch (activeSection) {
-      case 'dashboard':
-        return <Dashboard />;
-      case 'bookings':
-        return <FutureBookings />;
-      case 'drivers':
-        return <DriversManagement />;
-      case 'cars':
-        return <CarsManagement />;
-      case 'courses':
-        return <Courses />;
-      case 'profile':
-        return <Profile />;
-      default:
-        return <Dashboard />;
-    }
+  const renderContent = (): React.ReactNode => {
+    const sectionComponents: Record<SectionType, React.ReactNode> = {
+      dashboard: <Dashboard />,
+      bookings: <FutureBookings />,
+      drivers: <DriversManagement />,
+      cars: <CarsManagement />,
+      courses: <Courses />,
+      profile: <Profile />,
+    };
+
+    return sectionComponents[activeSection] || <Dashboard />;
   };
 
   return (
@@ -41,7 +37,7 @@ function App() {
         />
         
         <main className="flex-1 lg:ml-64 min-h-screen">
-          <div className="p-4 sm:p-6 lg:p-8">
+          <div className="container-padding">
             {renderContent()}
           </div>
         </main>

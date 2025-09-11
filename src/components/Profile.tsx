@@ -47,13 +47,14 @@ const Profile: React.FC = () => {
 
       <div className="max-w-4xl">
         {/* School Information */}
-        <div className="space-y-6">
+        <div className="space-y-8">
           {/* Main Info Card */}
           <div className="bg-[#8B8E8F] rounded-xl p-6">
-            <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-6">
+            <div className="space-y-6">
+              {/* Header Section */}
               <div>
                 <h2 className="text-2xl font-bold text-white mb-2">{schoolInfo.name}</h2>
-                <div className="flex items-center space-x-4 mb-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-2 sm:space-y-0">
                   <div className="flex items-center space-x-2">
                     <Star className="text-yellow-400 fill-current" size={20} />
                     <span className="text-white font-semibold">{schoolInfo.rating}</span>
@@ -65,53 +66,53 @@ const Profile: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Contact Information */}
-            <div className="grid md:grid-cols-2 gap-4 mb-6">
-              <div className="flex items-center space-x-3">
-                <MapPin className="text-red-400" size={20} />
-                <span className="text-gray-300">{schoolInfo.location}</span>
+              {/* Contact Information */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+                <div className="flex items-center space-x-3">
+                  <MapPin className="text-red-400 flex-shrink-0" size={20} />
+                  <span className="text-gray-300 text-sm lg:text-base">{schoolInfo.location}</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Phone className="text-green-400 flex-shrink-0" size={20} />
+                  <span className="text-gray-300 text-sm lg:text-base">{schoolInfo.phone}</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Mail className="text-blue-400 flex-shrink-0" size={20} />
+                  <span className="text-gray-300 text-sm lg:text-base break-all">{schoolInfo.email}</span>
+                </div>
               </div>
-              <div className="flex items-center space-x-3">
-                <Phone className="text-green-400" size={20} />
-                <span className="text-gray-300">{schoolInfo.phone}</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Mail className="text-blue-400" size={20} />
-                <span className="text-gray-300">{schoolInfo.email}</span>
-              </div>
-            </div>
 
-            {/* Statistics */}
-            <div className="grid grid-cols-3 gap-4">
-              <div className="text-center p-4 bg-[#434546] rounded-lg">
-                <Users className="text-[#FFD43B] mx-auto mb-2" size={24} />
-                <p className="text-2xl font-bold text-white">{schoolInfo.totalStudents.toLocaleString()}</p>
-                <p className="text-gray-300 text-sm">Students Trained</p>
-              </div>
-              <div className="text-center p-4 bg-[#434546] rounded-lg">
-                <TrendingUp className="text-green-400 mx-auto mb-2" size={24} />
-                <p className="text-2xl font-bold text-white">{schoolInfo.passRate}%</p>
-                <p className="text-gray-300 text-sm">Pass Rate</p>
-              </div>
-              <div className="text-center p-4 bg-[#434546] rounded-lg">
-                <Star className="text-yellow-400 mx-auto mb-2 fill-current" size={24} />
-                <p className="text-2xl font-bold text-white">{schoolInfo.rating}</p>
-                <p className="text-gray-300 text-sm">Average Rating</p>
+              {/* Statistics */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="text-center p-4 bg-[#434546] rounded-lg">
+                  <Users className="text-[#FFD43B] mx-auto mb-2" size={24} />
+                  <p className="text-xl lg:text-2xl font-bold text-white">{schoolInfo.totalStudents.toLocaleString()}</p>
+                  <p className="text-gray-300 text-xs lg:text-sm">Students Trained</p>
+                </div>
+                <div className="text-center p-4 bg-[#434546] rounded-lg">
+                  <TrendingUp className="text-green-400 mx-auto mb-2" size={24} />
+                  <p className="text-xl lg:text-2xl font-bold text-white">{schoolInfo.passRate}%</p>
+                  <p className="text-gray-300 text-xs lg:text-sm">Pass Rate</p>
+                </div>
+                <div className="text-center p-4 bg-[#434546] rounded-lg">
+                  <Star className="text-yellow-400 mx-auto mb-2 fill-current" size={24} />
+                  <p className="text-xl lg:text-2xl font-bold text-white">{schoolInfo.rating}</p>
+                  <p className="text-gray-300 text-xs lg:text-sm">Average Rating</p>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Customer Reviews */}
           <div className="bg-[#8B8E8F] rounded-xl p-6">
-            <h3 className="text-xl font-semibold text-white mb-6">Recent Customer Reviews</h3>
+            <h3 className="text-lg lg:text-xl font-semibold text-white mb-6">Recent Customer Reviews</h3>
             <div className="space-y-4">
               {reviews.map((review) => (
                 <div key={review.id} className="bg-[#434546] rounded-lg p-4">
-                  <div className="flex items-start justify-between mb-3">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 space-y-2 sm:space-y-0">
                     <div>
-                      <h4 className="font-medium text-white">{review.name}</h4>
+                      <h4 className="font-medium text-white text-sm lg:text-base">{review.name}</h4>
                       <div className="flex items-center space-x-1 mt-1">
                         {[...Array(5)].map((_, i) => (
                           <Star
@@ -126,11 +127,11 @@ const Profile: React.FC = () => {
                         ))}
                       </div>
                     </div>
-                    <span className="text-gray-400 text-sm">
+                    <span className="text-gray-400 text-xs lg:text-sm">
                       {new Date(review.date).toLocaleDateString()}
                     </span>
                   </div>
-                  <p className="text-gray-300">{review.comment}</p>
+                  <p className="text-gray-300 text-sm lg:text-base leading-relaxed">{review.comment}</p>
                 </div>
               ))}
             </div>

@@ -1,6 +1,6 @@
 # Drive Karo Website - Driving School Management System
 
-A modern, professional driving school management system built with React, TypeScript, and Tailwind CSS.
+A modern, professional driving school management system 
 
 ## 🎨 Design System
 
@@ -76,10 +76,6 @@ We've created reusable CSS classes for consistent styling:
 
 ## 🚀 Getting Started
 
-### Prerequisites
-
-- Node.js (v16 or higher)
-- npm or yarn
 
 ### Installation
 
@@ -114,74 +110,9 @@ npm run lint
 npm run format
 ```
 
-## 📱 Responsive Design
 
-The application is built with a mobile-first approach:
 
-- **Mobile**: Single column layout with collapsible sidebar
-- **Tablet**: Two-column grid layouts
-- **Desktop**: Full three-column layouts with persistent sidebar
 
-## 🎯 Key Features
-
-- **Dashboard**: Real-time statistics and activity monitoring
-- **Driver Management**: Add, remove, and track driver information
-- **Vehicle Management**: Fleet management with status tracking
-- **Booking System**: Future booking management
-- **Course Management**: Driving course administration
-- **Responsive Design**: Works seamlessly across all devices
-
-## 🔧 Customization
-
-### Adding New Components
-
-1. Create a new component file in `src/components/`
-2. Use the established design system classes
-3. Follow the component structure pattern
-4. Add proper TypeScript interfaces
-
-### Modifying Colors
-
-Update the CSS custom properties in `src/index.css`:
-
-```css
-:root {
-  --color-primary: #YOUR_COLOR;
-  --color-secondary: #YOUR_COLOR;
-  /* ... other colors */
-}
-```
-
-### Adding New Utility Classes
-
-Extend the `@layer components` section in `src/index.css`:
-
-```css
-@layer components {
-  .your-new-class {
-    @apply your-tailwind-classes;
-    /* custom CSS properties */
-  }
-}
-```
-
-## 📁 Project Structure
-
-```
-src/
-├── components/          # React components
-│   ├── Dashboard.tsx
-│   ├── Sidebar.tsx
-│   ├── DriversManagement.tsx
-│   ├── CarsManagement.tsx
-│   ├── FutureBookings.tsx
-│   ├── Courses.tsx
-│   └── Profile.tsx
-├── App.tsx             # Main application
-├── main.tsx            # Application entry point
-├── index.css           # Global styles and design system
-└── vite-env.d.ts       # Vite type definitions
-```
 
 ## 🎨 Styling Guidelines
 
@@ -223,15 +154,7 @@ src/
 - [ ] Integration with external APIs
 - [ ] Multi-language support
 
-## 🤝 Contributing
 
-1. Follow the established coding standards
-2. Use the design system consistently
-3. Write clear commit messages
-4. Test your changes thoroughly
-5. Update documentation as needed
-
-## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 

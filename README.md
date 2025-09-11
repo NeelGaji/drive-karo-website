@@ -156,8 +156,3 @@ npm run format
 
 
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
----
-
-**Built with ❤️ using React, TypeScript, and Tailwind CSS**

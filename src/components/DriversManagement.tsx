@@ -62,14 +62,14 @@ const DriversManagement: React.FC = () => {
     },
   ]);
 
-  const [showAddForm, setShowAddForm] = useState(false);
 
   const deleteDriver = (id: string) => {
     setDrivers(drivers.filter(driver => driver.id !== id));
   };
 
   const addNewDriver = () => {
-    setShowAddForm(true);
+    // TODO: Implement add driver functionality
+    console.log('Add new driver clicked');
   };
 
   const calculateSummaryStats = (): SummaryStat[] => [

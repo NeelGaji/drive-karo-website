@@ -1,11 +1,12 @@
 import React from 'react';
-import { Users, Car, MapPin, Clock } from 'lucide-react';
+import { Users, Car, Clock, LucideIcon } from 'lucide-react';
+import LiveTracking from './LiveTracking';
 
 interface StatCard {
   title: string;
   value: string;
   total?: string;
-  icon: React.ComponentType<{ size?: number | string; className?: string }>;
+  icon: LucideIcon;
   color: string;
   description?: string;
 }
@@ -120,23 +121,8 @@ const Dashboard: React.FC = () => {
         </div>
       </section>
 
-      {/* Live Tracking Map */}
-      <section className="card">
-        <div className="flex items-center space-x-3 mb-6">
-          <MapPin className="icon-primary" size={24} />
-          <h2 className="text-subheading">Live Tracking</h2>
-        </div>
-        
-        <div className="bg-[#434546] rounded-lg p-8 flex items-center justify-center min-h-[300px] border-2 border-dashed border-gray-600">
-          <div className="text-center">
-            <MapPin className="icon-secondary mx-auto mb-4" size={48} />
-            <p className="text-body text-lg">Interactive Map Component</p>
-            <p className="text-muted text-sm mt-2">
-              Live vehicle tracking will be displayed here
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* Live Tracking Component */}
+      <LiveTracking />
 
       {/* Recent Activity */}
       <section className="card">

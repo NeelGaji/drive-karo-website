@@ -38,14 +38,6 @@ const Profile: React.FC = () => {
     },
   ];
 
-  const leaderboard = [
-    { rank: 1, name: 'Elite Driving Academy', rating: 4.8, location: 'Downtown City' },
-    { rank: 2, name: 'City Drive Masters', rating: 4.7, location: 'North District' },
-    { rank: 3, name: 'Pro Driving School', rating: 4.6, location: 'West Side' },
-    { rank: 4, name: 'Quick Learn Driving', rating: 4.5, location: 'East Zone' },
-    { rank: 5, name: 'Safe Drive Academy', rating: 4.4, location: 'South Area' },
-  ];
-
   return (
     <div className="space-y-8">
       <div className="flex items-center space-x-3">
@@ -53,9 +45,9 @@ const Profile: React.FC = () => {
         <h1 className="text-3xl font-bold text-[#FFD43B]">School Profile</h1>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-8">
+      <div className="max-w-4xl">
         {/* School Information */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="space-y-6">
           {/* Main Info Card */}
           <div className="bg-[#8B8E8F] rounded-xl p-6">
             <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-6">
@@ -142,65 +134,6 @@ const Profile: React.FC = () => {
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-
-        {/* Leaderboard */}
-        <div className="bg-[#8B8E8F] rounded-xl p-6">
-          <h3 className="text-xl font-semibold text-white mb-6">Nationwide Leaderboard</h3>
-          <div className="space-y-3">
-            {leaderboard.map((school) => (
-              <div
-                key={school.rank}
-                className={`p-4 rounded-lg ${
-                  school.rank === 1
-                    ? 'bg-[#FFD43B] text-black'
-                    : 'bg-[#434546] text-white'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
-                        school.rank === 1
-                          ? 'bg-black text-[#FFD43B]'
-                          : school.rank <= 3
-                          ? 'bg-[#FFD43B] text-black'
-                          : 'bg-gray-600 text-white'
-                      }`}
-                    >
-                      {school.rank}
-                    </div>
-                    <div>
-                      <p className={`font-medium ${school.rank === 1 ? 'text-black' : 'text-white'}`}>
-                        {school.name}
-                      </p>
-                      <p className={`text-sm ${school.rank === 1 ? 'text-gray-700' : 'text-gray-400'}`}>
-                        {school.location}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <Star
-                      className={`${
-                        school.rank === 1 ? 'text-black fill-current' : 'text-yellow-400 fill-current'
-                      }`}
-                      size={16}
-                    />
-                    <span className={`font-bold ${school.rank === 1 ? 'text-black' : 'text-white'}`}>
-                      {school.rating}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-6 p-4 bg-[#434546] rounded-lg text-center">
-            <p className="text-[#FFD43B] font-semibold">🏆 #1 Ranked School!</p>
-            <p className="text-gray-300 text-sm mt-1">
-              You're leading the competition in your area!
-            </p>
           </div>
         </div>
       </div>
